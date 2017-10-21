@@ -6,7 +6,7 @@ jobs:
     working_directory: ~/oauth2_proxy
 
     docker:
-      - image: docker:17.06.0-ce-git
+      - image: factominc/elixir_python
 
     steps:
       - checkout
@@ -81,7 +81,8 @@ workflows:
   version: 2
   commit-workflow:
     jobs:
-      - build
+      - build:
+          context: org-global
 
   scheduled-workflow:
     triggers:
@@ -91,4 +92,5 @@ workflows:
             branches:
               only: develop
     jobs:
-      - build
+      - build:
+          context: org-global
