@@ -15,8 +15,16 @@ From wherever you have cloned this repo, run
 `docker build -t oauth2_proxy .`
 
 ## Run
-1. Create an oauth2_proxy.conf file somewhere
-2. `docker run --rm -p 443:443 -v <location of oauth2_proxy.conf>:/srv/oauth2_proxy.conf oauth2_proxy`
+1. Create an oauth2_proxy.conf file somewhere.  Have it point it's TLS cert crt/key to /srv/...
+2. Put your TLS cert crt/key somewhere mountable
+
+```
+docker run --rm -p 443:443 
+			-v <location of oauth2_proxy.conf>:/srv/oauth2_proxy.conf 
+			-v <location of cert.crt>:/srv/cert.crt 
+			-v <location of cert.key>:/srv/cert.key
+			oauth2_proxy
+```
 
 #Documentation
 Go to [the sunsource](https://github.com/bitly/oauth2_proxy)

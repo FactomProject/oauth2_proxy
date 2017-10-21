@@ -17,5 +17,5 @@ COPY --from=builder /go/bin/oauth2_proxy /go/bin/oauth2_proxy
 
 CMD ["/go/bin/oauth2_proxy", "-config=/srv/oauth2_proxy.conf"]
 
-EXPOSE 443
+EXPOSE 4180 443
 
