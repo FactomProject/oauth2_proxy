@@ -2,7 +2,7 @@ FROM golang:1.9-alpine as builder
 
 # Build oauth2_proxy
 RUN set -x \
-    && apk add --no-cache git \
+    && apk add --no-cache curl git \
     && go get github.com/bitly/oauth2_proxy
 
 # Now squash everything
