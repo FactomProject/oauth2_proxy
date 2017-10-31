@@ -83,6 +83,9 @@ workflows:
     jobs:
       - build:
           context: org-global
+          filters:
+            tags:
+              only: /.*/
 
   scheduled-workflow:
     triggers:
