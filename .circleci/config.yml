@@ -26,18 +26,25 @@ jobs:
 
            # Login to DockerHub
             docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+            
+            # If there is a tag, use it
+            if [ "$CIRCLE_TAG" != "" ]; then
+              docker tag oauth2_proxy factominc/oauth2_proxy:${CIRCLE_TAG}
+              docker push factominc/oauth2_proxy:${CIRCLE_TAG}
+            fi
+            
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
 
-            if [ "${CIRCLE_BRANCH}" == "master" ] || [ "${CIRCLE_BRANCH}" == "develop" ]; then
-
-              # If there is a tag, use it
-              if [ "$CIRCLE_TAG" != "" ]; then
-                docker tag oauth2_proxy factominc/oauth2_proxy:${TAG}
-                docker push factominc/oauth2_proxy:${TAG}
-              fi
-
-              # But tag it as latest anyhow
+              # Tag master as latest
               docker tag oauth2_proxy factominc/oauth2_proxy:latest
               docker push factominc/oauth2_proxy:latest
+            fi
+
+            if [ "${CIRCLE_BRANCH}" == "develop" ]; then
+            
+              # Tag develop as develop anyhow
+              docker tag oauth2_proxy factominc/oauth2_proxy:develop
+              docker push factominc/oauth2_proxy:develop
             fi
 
             docker logout
@@ -48,20 +55,25 @@ jobs:
             # Login to AWS ECR
             login="$(aws ecr get-login  --no-include-email --region $AWS_REGION)"
             ${login}
+            
+            # If there is a tag, use it
+            if [ "$CIRCLE_TAG" != "" ]; then
+              docker tag oauth2_proxy ${AWS_REPO_BASE_URI}/oauth2_proxy:${CIRCLE_TAG}
+              docker push ${AWS_REPO_BASE_URI}/oauth2_proxy:${CIRCLE_TAG}
+            fi
+            
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
 
-            if [ "${CIRCLE_BRANCH}" == "master" ] || [ "${CIRCLE_BRANCH}" == "develop" ]; then
-
-              # If there is a tag, use it
-              if [ "$CIRCLE_TAG" != "" ]; then
-                docker tag oauth2_proxy ${AWS_REPO_BASE_URI}/oauth2_proxy:${TAG}
-                docker push ${AWS_REPO_BASE_URI}/oauth2_proxy:${TAG}
-
-              fi
-
-              # But tag it as latest anyhow
+              # Tag master as latest
               docker tag oauth2_proxy ${AWS_REPO_BASE_URI}/oauth2_proxy:latest
               docker push ${AWS_REPO_BASE_URI}/oauth2_proxy:latest
+            fi
 
+            if [ "${CIRCLE_BRANCH}" == "develop" ]; then
+            
+              # Tag develop as develop anyhow
+              docker tag oauth2_proxy ${AWS_REPO_BASE_URI}/oauth2_proxy:develop
+              docker push ${AWS_REPO_BASE_URI}/oauth2_proxy:develop
             fi
 
             docker logout
