@@ -6,7 +6,7 @@ RUN set -x \
     && go get github.com/bitly/oauth2_proxy
 
 # Now squash everything
-FROM alpine:3.6
+FROM alpine:3.7
 
 # Get curl
 RUN apk add --no-cache ca-certificates curl
